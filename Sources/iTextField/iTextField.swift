@@ -49,17 +49,27 @@ public struct iTextField: UIViewRepresentable {
     
     @Environment(\.layoutDirection) var layoutDirection: LayoutDirection
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
+    private let insets: UIEdgeInsets
+    private let clearButtonPadding: CGFloat
+   
         
     /// Initializes a new **text field** 👷‍♂️⌨️ with enhanced functionality. 🏋️‍♀️
     /// - Parameters:
     ///   - placeholder: The text to display in the text field when nothing has been inputted
     ///   - text: A binding to the text `String` to be edited by the text field 📱
     ///   - isEditing: A binding to a `Bool` indicating whether the text field is being edited 💻💬
-    public init(_ placeholder: String,
-                text: Binding<String>,
-                isEditing: Binding<Bool>? = nil)
+    public init(
+        _ placeholder: String,
+        text: Binding<String>,
+        isEditing: Binding<Bool>? = nil,
+        insets: UIEdgeInsets = .zero,
+        clearButtonPadding: CGFloat = 6
+    )
     {
         self.placeholder = placeholder
+        self.insets = insets
+        self.clearButtonPadding = clearButtonPadding
         self._text = text
         if let isEditing = isEditing {
             _externalIsEditing = isEditing
@@ -109,7 +119,10 @@ public struct iTextField: UIViewRepresentable {
     }
     
     public func makeUIView(context: Context) -> UITextField {
-        let textField = UITextField()
+        let textField = TextFieldWithEdgeInsets(
+            insets: self.insets,
+            clearButtonPadding: clearButtonPadding
+        )
         
         // Validating and Handling Edits
         textField.delegate = context.coordinator
