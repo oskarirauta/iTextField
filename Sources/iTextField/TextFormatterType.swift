@@ -12,5 +12,5 @@ public enum TextFormatterType {
 
     /// A currency formatter where a number like 10000 will be changed to 10,000postfix, where post fix
     /// stands for the currency something like 10,000$ or 10,000 Won
-    case currency(postFix: String)
+    case currency(postFix: String, locale: Locale)
 }

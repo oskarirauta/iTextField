@@ -52,6 +52,7 @@ public struct iTextField: UIViewRepresentable {
     
     private let insets: UIEdgeInsets
     private let clearButtonPadding: CGFloat
+    private let textFormatterType: TextFormatterType?
    
         
     /// Initializes a new **text field** 👷‍♂️⌨️ with enhanced functionality. 🏋️‍♀️
@@ -64,12 +65,14 @@ public struct iTextField: UIViewRepresentable {
         text: Binding<String>,
         isEditing: Binding<Bool>? = nil,
         insets: UIEdgeInsets = .zero,
-        clearButtonPadding: CGFloat = 6
+        clearButtonPadding: CGFloat = 6,
+        textFormatterType: TextFormatterType? = nil
     )
     {
         self.placeholder = placeholder
         self.insets = insets
         self.clearButtonPadding = clearButtonPadding
+        self.textFormatterType = textFormatterType
         self._text = text
         if let isEditing = isEditing {
             _externalIsEditing = isEditing
