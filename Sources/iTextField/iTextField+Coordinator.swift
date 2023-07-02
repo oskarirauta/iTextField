@@ -13,8 +13,10 @@ public extension iTextField {
     
      final class Coordinator: NSObject, UITextFieldDelegate {
         @Binding var text: String
-        @Binding var isEditing: Bool
+         @Binding var isEditing: Bool
         var characterLimit: Int? = nil
+        private let textFormatterType: TextFormatterType?
+         private var isDeleting: Bool = false
         
         var didBeginEditing: () -> Void
         var didChange: () -> Void
@@ -25,6 +27,7 @@ public extension iTextField {
         init(text: Binding<String>,
              isEditing: Binding<Bool>,
              characterLimit: Int?,
+             textFormatterType: TextFormatterType?,
              didBeginEditing: @escaping () -> Void,
              didChange: @escaping () -> Void,
              didEndEditing: @escaping () -> Void,
@@ -34,6 +37,7 @@ public extension iTextField {
             self._text = text
             self._isEditing = isEditing
             self.characterLimit = characterLimit
+            self.textFormatterType = textFormatterType
             self.didBeginEditing = didBeginEditing
             self.didChange = didChange
             self.didEndEditing = didEndEditing
@@ -54,11 +58,17 @@ public extension iTextField {
         }
         
         @objc func textFieldDidChange(_ textField: UITextField) {
+            defer {
+                formatTextIfNeeded(textField)
+            }
             text = textField.text ?? ""
             didChange()
         }
         
         public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+            defer {
+                formatTextIfNeeded(textField)
+            }
             DispatchQueue.main.async { [self] in
                 if isEditing {
                     isEditing = false
@@ -68,6 +78,9 @@ public extension iTextField {
         }
         
         public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            defer {
+                formatTextIfNeeded(textField)
+            }
             isEditing = false
             shouldReturn()
             return false
@@ -91,4 +104,37 @@ public extension iTextField {
         }
     }
     
+}
+
+
+private extension iTextField.Coordinator {
+    
+ 
+    
+    func formatTextIfNeeded(_ textField: UITextField) {
+        guard let textFormatterType = self.textFormatterType,
+        isEditing == false else {return}
+        
+        // TODO: - Add logic for formatting text (Note: The commented one didn't work as expected so more work needed (Charles, July 2, 2023).
+//        switch textFormatterType {
+//        case .currency(let postFix, let localeIdentifier):
+//            var isNumberOrDecimalInputTextField: Bool {
+//               return textField.keyboardType == .numberPad ||
+//                textField.keyboardType == .decimalPad ||
+//                textField.keyboardType == .phonePad
+//           }
+//
+//            guard isNumberOrDecimalInputTextField else {return}
+//
+//            guard let currentTypedText  = textField.text,
+//                  !currentTypedText.isEmpty,!currentTypedText.contains(postFix)
+//            else {return}
+//
+//            DispatchQueue.main.async {
+//                textField.text?.append(postFix)
+//                self.text = textField.text ?? ""
+//            }
+//        }
+    }
+
 }

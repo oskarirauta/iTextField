@@ -189,7 +189,8 @@ public struct iTextField: UIViewRepresentable {
         return iTextField.Coordinator(
             text: $text,
             isEditing: isEditing,
-            characterLimit: characterLimit, 
+            characterLimit: characterLimit,
+            textFormatterType: textFormatterType, 
             didBeginEditing: didBeginEditing,
             didChange: didChange,
             didEndEditing: didEndEditing,
