@@ -184,6 +184,9 @@ public struct iTextField: UIViewRepresentable {
         DispatchQueue.main.async {
             if isEditing.wrappedValue {
                 textField.becomeFirstResponder()
+                if let selectedRange = textField.selectedTextRange {
+                    textField.selectedTextRange = textField.textRange(from: selectedRange.end, to: selectedRange.end)
+                }
             } else {
                 textField.resignFirstResponder()
             }
