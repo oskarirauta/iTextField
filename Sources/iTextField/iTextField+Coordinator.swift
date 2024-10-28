@@ -113,11 +113,12 @@ public extension iTextField {
 
 private extension iTextField.Coordinator {
     
- 
-    
     func formatTextIfNeeded(_ textField: UITextField) {
-        guard let textFormatterType = self.textFormatterType,
-        isEditing == false else {return}
+        
+        guard isEditing == false else { return }
+        
+        // guard let textFormatterType = self.textFormatterType,
+        // isEditing == false else {return}
         
         // TODO: - Add logic for formatting text (Note: The commented one didn't work as expected so more work needed (Charles, July 2, 2023).
 //        switch textFormatterType {
