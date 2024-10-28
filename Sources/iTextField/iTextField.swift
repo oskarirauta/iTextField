@@ -135,8 +135,10 @@ public struct iTextField: UIViewRepresentable {
         textField.isSecureTextEntry = isSecure
 
         // Managing the Editing Behavior
-        if isEditing.wrappedValue {
-            textField.becomeFirstResponder()
+        DispatchQueue.main.async {
+            if isEditing.wrappedValue {
+                textField.becomeFirstResponder()
+            }
         }
         
         textField.addTarget(context.coordinator, action: #selector(iTextField.Coordinator.textFieldDidChange(_:)), for: .editingChanged)
