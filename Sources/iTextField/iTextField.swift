@@ -20,8 +20,9 @@ public struct iTextField: UIViewRepresentable {
     var didBeginEditing: () -> Void = { }
     var didChange: () -> Void = { }
     var didEndEditing: () -> Void = { }
-    var shouldReturn: () -> Void = { }
-    var shouldClear: () -> Void = { }
+    var shouldReturn: () -> Bool = { return false }
+    var shouldClear: () -> Bool = { return false }
+    var shouldChange: (NSRange, String) -> Bool = { _, _ in return true }
     
     var font: UIFont?
     var foregroundColor: UIColor?
@@ -199,7 +200,8 @@ public struct iTextField: UIViewRepresentable {
             didChange: didChange,
             didEndEditing: didEndEditing,
             shouldReturn: shouldReturn,
-            shouldClear: shouldClear
+            shouldClear: shouldClear,
+            shouldChange: shouldChange
         )
     }
 

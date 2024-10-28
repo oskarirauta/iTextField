@@ -21,9 +21,10 @@ public extension iTextField {
         var didBeginEditing: () -> Void
         var didChange: () -> Void
         var didEndEditing: () -> Void
-        var shouldReturn: () -> Void
-        var shouldClear: () -> Void
-        
+        var shouldReturn: () -> Bool
+        var shouldClear: () -> Bool
+        var shouldChange: (NSRange, String) -> Bool
+
         init(text: Binding<String>,
              isEditing: Binding<Bool>,
              characterLimit: Int?,
@@ -31,8 +32,9 @@ public extension iTextField {
              didBeginEditing: @escaping () -> Void,
              didChange: @escaping () -> Void,
              didEndEditing: @escaping () -> Void,
-             shouldReturn: @escaping () -> Void,
-             shouldClear: @escaping () -> Void)
+             shouldReturn: @escaping () -> Bool,
+             shouldClear: @escaping () -> Bool,
+             shouldChange: @escaping (NSRange, String) -> Bool)
         {
             self._text = text
             self._isEditing = isEditing
@@ -43,6 +45,7 @@ public extension iTextField {
             self.didEndEditing = didEndEditing
             self.shouldReturn = shouldReturn
             self.shouldClear = shouldClear
+            self.shouldChange = shouldChange
         }
         
         public func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -82,14 +85,15 @@ public extension iTextField {
                 formatTextIfNeeded(textField)
             }
             isEditing = false
-            shouldReturn()
-            return false
+            return shouldReturn() // false
         }
         
         public func textFieldShouldClear(_ textField: UITextField) -> Bool {
-            shouldClear()
-            text = ""
-            return false
+            let result = shouldClear()
+            if result {
+                text = ""
+            }
+            return result // false
         }
         
         public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -100,7 +104,7 @@ public extension iTextField {
                 }
             }
 
-            return true
+            return shouldChange(range, string)
         }
     }
     

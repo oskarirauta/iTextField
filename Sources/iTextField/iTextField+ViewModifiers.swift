@@ -147,12 +147,21 @@ extension iTextField {
         return view
     }
     
-    /// Modifies whether and when the text field **clear button** appears on the view. ⭕️ ❌
+    /// Modifies if text field **clear button** appears on the view or not. ⭕️ ❌
     /// - Parameter showsButton: Whether the clear button should be visible
     /// - Returns: A text field with updated clear button settings
     public func showsClearButton(_ showsButton: Bool) -> iTextField {
         var view = self
         view.clearButtonMode = showsButton ? .always : .never
+        return view
+    }
+
+    /// Modifies whether and when the text field **clear button** appears on the view. ⭕️ ❌
+    /// - Parameter mode: Whether and when the clear button should be visible
+    /// - Returns: A text field with updated clear button settings
+    public func clearButtonMode(_ mode: UITextField.ViewMode) -> iTextField {
+        var view = self
+        view.clearButtonMode = mode
         return view
     }
     
@@ -258,7 +267,7 @@ extension iTextField {
     /// Modifies the function called when the user presses the return key. ⬇️ ➡️
     /// - Parameter action: The function called when the user presses the return key. Does nothing if `nil`.
     /// - Returns: An updated text field using the desired funtion called when the user presses the return key
-    public func onReturn(perform action: (() -> Void)? = nil) -> iTextField {
+    public func onReturn(perform action: (() -> Bool)? = nil) -> iTextField {
         var view = self
         if let action = action {
             view.shouldReturn = action
@@ -269,10 +278,21 @@ extension iTextField {
     /// Modifies the function called when the user clears the text field. ❌
     /// - Parameter action: The function called when the user clears the text field. Does nothing if `nil`.
     /// - Returns: An updated text field using the desired function called when the user clears the text field
-    public func onClear(perform action: (() -> Void)? = nil) -> iTextField {
+    public func onClear(perform action: (() -> Bool)? = nil) -> iTextField {
         var view = self
         if let action = action {
             view.shouldClear = action
+        }
+        return view
+    }
+
+    /// Modifies the function called when the user makes changes to textfield's text. ❌
+    /// - Parameter action: The function called when the user changes the text field's content. Does nothing if `nil`.
+    /// - Returns: An updated text field using the desired function called when the user changes text field's content
+    public func onChange(perform action: ((NSRange, String) -> Bool)? = nil) -> iTextField {
+        var view = self
+        if let action = action {
+            view.shouldChange = action
         }
         return view
     }
